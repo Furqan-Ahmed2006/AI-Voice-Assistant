@@ -4,6 +4,8 @@ import pyttsx3
 import os
 import requests
 import json
+from dotenv import load_dotenv
+load_dotenv()
 engine=pyttsx3.init()
 engine.setProperty("rate",180)
 api_key=os.getenv("OPENROUTER_API_KEY")
@@ -19,10 +21,11 @@ def generate_ai_response(prompt):
                 "Authorization": f"Bearer {api_key}",
                 "Content-Type": "application/json",
             },
-            data=json.dumps({
-                "model": "google/gemini-flash-1.5",  
+            json={ 
+                "model": "google/gemini-3-flash-preview",
                 "messages": [{"role": "user", "content": prompt}],
-            })
+                "max_tokens": 300 
+            }
         )
         if response.status_code == 200:
             result = response.json()
